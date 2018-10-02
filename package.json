@@ -1,0 +1,27 @@
+{
+  "name": "landingpageutil",
+  "version": "0.0.1",
+  "description": "Alters Landing Page zip to public folder for viewability",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeomnitrix/LandingPageUtil.git"
+  },
+  "keywords": [
+    "Landing",
+    "Page",
+    "Util",
+    "for",
+    "zip",
+    "extraction"
+  ],
+  "author": "Vinit Tiwari",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codeomnitrix/LandingPageUtil/issues"
+  },
+  "homepage": "https://github.com/codeomnitrix/LandingPageUtil#readme"
+}
