@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/codeomnitrix/LandingPageUtil/issues"
   },
-  "homepage": "https://github.com/codeomnitrix/LandingPageUtil#readme"
+  "homepage": "https://github.com/codeomnitrix/LandingPageUtil#readme",
+  "dependencies": {
+    "extract-zip": "^1.6.7"
+  }
 }
