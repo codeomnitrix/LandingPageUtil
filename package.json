@@ -4,7 +4,7 @@
   "description": "Alters Landing Page zip to public folder for viewability",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,11 @@
   },
   "homepage": "https://github.com/codeomnitrix/LandingPageUtil#readme",
   "dependencies": {
-    "extract-zip": "^1.6.7"
+    "extract-zip": "^1.6.7",
+    "rimraf": "^2.6.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
