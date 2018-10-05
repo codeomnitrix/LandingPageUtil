@@ -7,4 +7,11 @@
 ### Offer Url Updation
 - updates offer url in each of the anchor having certain class
 
-### More sections to be written
+### File Extraction strategy
+- Move archive to temp
+- move js files to js/<randomstr>/fileName.js
+- similarly for css file
+- images and other assets are moved to assets/<randomstr>/fileName.ext
+
+
+

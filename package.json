@@ -26,6 +26,7 @@
   "homepage": "https://github.com/codeomnitrix/LandingPageUtil#readme",
   "dependencies": {
     "extract-zip": "^1.6.7",
+    "jsdom": "^12.1.0",
     "rimraf": "^2.6.2"
   },
   "devDependencies": {
