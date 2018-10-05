@@ -17,12 +17,23 @@ exports.processArchive = function(archivePath, outputPath, tempPath) {
             }
             files[fileExtension].push(outputPath + "/" + randomFolderName + "/" + file);
         });
+        fileHandlerUtil.removeDir(targetFolder);
         return files;
     });
 }
 
-exports.updateOfferUrl = function(pageString, linkClassName, url, identifier) {
-	
+exports.updatePageLinks = function(pageString, files) {
+    pageString = textReplacementUtil.updateJSReference(pageString, files['js']);
+    pageString = textReplacementUtil.updateCSSReference(pageString, files['css']);
+    pageString = textReplacementUtil.updateAssetsReference(pageString, files['png']
+                                                        .concat(files['jpg'])
+                                                        .concat(files['jpeg'])
+                                                        .concat(files['bmp']));
+    return pageString;
+}
+
+exports.updateOfferURL = function(pageString, offerURL, linkClass) {
+    return textReplacementUtil.updateOfferURL(pageString, offerURL, linkClass);
 }
 
 function walkSync(dirList, filesList) {
