@@ -1,6 +1,6 @@
 {
   "name": "landingpageutil",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Alters Landing Page zip to public folder for viewability",
   "main": "index.js",
   "scripts": {
