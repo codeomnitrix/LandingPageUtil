@@ -29,7 +29,7 @@ exports.updatePageLinks = function(pageString, files) {
     pageString = textReplacementUtil.updateJSReference(pageString, files['js']);
     pageString = textReplacementUtil.updateCSSReference(pageString, files['css']);
     imgArr = getImageArr(files);
-    pageString = textReplacementUtil.updateAssetsReference(getImageArr(files));
+    pageString = textReplacementUtil.updateAssetsReference(pageString, getImageArr(files));
     return pageString;
 }
 
