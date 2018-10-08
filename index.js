@@ -4,21 +4,24 @@ const textReplacementUtil = require('./lib/text-replacement-util');
 const fs =  require('fs');
 // Processes Archive to put js, css and other assets in public folder
 // returns html file with updated resources location
-exports.processArchive = function(archivePath, outputPath, tempPath) {
+exports.processArchive = function(archivePath, outputPath, tempPath, callback) {
     extractionUtil.extract(archivePath, tempPath, function(targetFolder) {
         var files = {};
-        var filesList = walkSync([targetFolder], []);
+        var filesList = [];
+        filesList = walkSync([targetFolder], filesList);
         var randomFolderName = -1;
         filesList.forEach(function(file) {
-            randomFolderName = fileHandlerUtil.moveFileViaExtension(targetFolder, file, outputPath, randomFolderName);
-            var fileExtension = file.subStr(file.lastIndexOf(".")+1);
+            var fileName = file.substr(file.lastIndexOf("/")+1);
+            var folderName = file.substr(0, file.lastIndexOf("/"));
+            randomFolderName = fileHandlerUtil.moveFileViaExtension(folderName, fileName, outputPath, randomFolderName);
+            var fileExtension = fileName.substr(fileName.lastIndexOf(".")+1);
             if (!(fileExtension in files)) {
                 files[fileExtension] = [];
             }
-            files[fileExtension].push(outputPath + "/" + randomFolderName + "/" + file);
+            files[fileExtension].push(outputPath + "/" + randomFolderName + "/" + fileName);
         });
         fileHandlerUtil.removeDir(targetFolder);
-        return files;
+        callback(files);
     });
 }
 
@@ -38,18 +41,17 @@ exports.updateOfferURL = function(pageString, offerURL, linkClass) {
 
 function walkSync(dirList, filesList) {
     if (dirList.length > 0) {
+        var dir = dirList[0];
         var files = fs.readdirSync(dirList[0]);
         dirList.splice(0, 1);
         files.forEach(function(file) {
-            if (fs.fstatSync(dir + file).isDirectory()) {
-                dirList.push(dir + file);
+            if (fs.lstatSync(dir + "/" + file).isDirectory()) {
+                dirList.push(dir + "/" + file);
             }else {
-                filesList.push(file);
+                filesList.push(dir + "/" + file);
             }
         });
-        walkSync(dirList);
-    }else {
-        return filesList;
+        filesList.concat(walkSync(dirList, filesList));
     }
-    
+    return filesList;
 }
