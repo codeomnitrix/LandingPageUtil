@@ -20,7 +20,7 @@ exports.processArchive = function(archivePath, outputPath, tempPath, callback) {
             if (!(fileExtension in files)) {
                 files[fileExtension] = [];
             }
-            files[fileExtension].push(outputPath + "/" + randomFolderName + "/" + retObj['subFolder'] + fileName);
+            files[fileExtension].push(outputPath + "/" + randomFolderName + "/" + retObj['subFolder'] + "/" + fileName);
         });
         fileHandlerUtil.removeDir(targetFolder);
         callback(files);
