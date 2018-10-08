@@ -16,18 +16,21 @@ describe("file-handler-util for file movement", function() {
     })
 
     it("js file should be moved to js folder", function() {
+        randomFolderName = -1;
         randomFolderName = fileHandlerUtil.moveFileViaExtension(dirName, "bootstrap.min.js", __dirname + "/temp", randomFolderName);    
-        expect(fs.readdirSync(__dirname + "/temp/" + randomFolderName + "/js")[0] == "bootstrap.min.js");
+        expect(fs.readdirSync(__dirname + "/temp/" + randomFolderName['randomFolder'] + "/js")[0] == "bootstrap.min.js");
     });
 
     it("css file should be moved to css folder", function() {
+        randomFolderName = randomFolderName['randomFolder'];
         randomFolderName = fileHandlerUtil.moveFileViaExtension(dirName, "style.css", __dirname + "/temp", randomFolderName);    
-        expect(fs.readdirSync(__dirname + "/temp/" + randomFolderName + "/css")[0] == "style.css");
+        expect(fs.readdirSync(__dirname + "/temp/" + randomFolderName['randomFolder'] + "/css")[0] == "style.css");
     });
 
     it("html file should be moved base folder", function() {
+        randomFolderName = randomFolderName['randomFolder'];
         randomFolderName = fileHandlerUtil.moveFileViaExtension(dirName, "index.html", __dirname + "/temp", randomFolderName);    
-        expect(fs.readdirSync(__dirname + "/temp/" + randomFolderName)[0] == "index.html");
+        expect(fs.readdirSync(__dirname + "/temp/" + randomFolderName['randomFolder'])[0] == "index.html");
     });
 
     after(function(done) {
@@ -35,7 +38,7 @@ describe("file-handler-util for file movement", function() {
             rimraf(dirName, function(err){});
         }
         if (randomFolderName != -1) {
-            rimraf(__dirname + "/temp/" + randomFolderName, function(err){});
+            rimraf(__dirname + "/temp/" + randomFolderName['randomFolder'], function(err){});
         }
         done();
     })

@@ -10,15 +10,17 @@ exports.processArchive = function(archivePath, outputPath, tempPath, callback) {
         var filesList = [];
         filesList = walkSync([targetFolder], filesList);
         var randomFolderName = -1;
+        var retObj = {};
         filesList.forEach(function(file) {
             var fileName = file.substr(file.lastIndexOf("/")+1);
             var folderName = file.substr(0, file.lastIndexOf("/"));
-            randomFolderName = fileHandlerUtil.moveFileViaExtension(folderName, fileName, outputPath, randomFolderName);
+            retObj = fileHandlerUtil.moveFileViaExtension(folderName, fileName, outputPath, randomFolderName);
+            randomFolderName = retObj['randomFolder'];
             var fileExtension = fileName.substr(fileName.lastIndexOf(".")+1);
             if (!(fileExtension in files)) {
                 files[fileExtension] = [];
             }
-            files[fileExtension].push(outputPath + "/" + randomFolderName + "/" + fileName);
+            files[fileExtension].push(outputPath + "/" + randomFolderName + "/" + retObj['subFolder'] + fileName);
         });
         fileHandlerUtil.removeDir(targetFolder);
         callback(files);
