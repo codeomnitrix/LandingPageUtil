@@ -28,15 +28,30 @@ exports.processArchive = function(archivePath, outputPath, tempPath, callback) {
 exports.updatePageLinks = function(pageString, files) {
     pageString = textReplacementUtil.updateJSReference(pageString, files['js']);
     pageString = textReplacementUtil.updateCSSReference(pageString, files['css']);
-    pageString = textReplacementUtil.updateAssetsReference(pageString, files['png']
-                                                        .concat(files['jpg'])
-                                                        .concat(files['jpeg'])
-                                                        .concat(files['bmp']));
+    imgArr = getImageArr(files);
+    pageString = textReplacementUtil.updateAssetsReference(getImageArr(files));
     return pageString;
 }
 
 exports.updateOfferURL = function(pageString, offerURL, linkClass) {
     return textReplacementUtil.updateOfferURL(pageString, offerURL, linkClass);
+}
+
+function getImageArr(files) {
+    var retArr = [];
+    if (files['png'] != undefined) {
+        retArr.concat(files['png']);
+    }
+    if (files['jpg'] != undefined) {
+        retArr.concat(files['jpg']);
+    }
+    if (files['jpeg'] != undefined) {
+        retArr.concat(files['jpeg']);
+    }
+    if (files['bmp'] != undefined) {
+        retArr.concat(files['bmp']);
+    }
+    return retArr;
 }
 
 function walkSync(dirList, filesList) {
