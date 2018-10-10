@@ -5,7 +5,7 @@ const textReplacementUtil = require('./lib/text-replacement-util');
 const fs =  require('fs');
 // Processes Archive to put js, css and other assets in public folder
 // returns html file with updated resources location
-exports.processArchive = function(archivePath, outputPath, tempPath, storge, bucket, callback) {
+exports.processArchive = function(archivePath, outputPath, tempPath, storage, bucket, callback) {
     extractionUtil.extract(archivePath, tempPath, function(targetFolder) {
         var files = {};
         var filesList = [];
@@ -15,13 +15,20 @@ exports.processArchive = function(archivePath, outputPath, tempPath, storge, buc
         filesList.forEach(function(file) {
             var fileName = file.substr(file.lastIndexOf("/")+1);
             var folderName = file.substr(0, file.lastIndexOf("/"));
-            randomFolderName = googleBucketUtil.uploadFile(folderName, fileName, storage, bucket, outputPath, randomFolderName);
-            var fileExtension = fileName.substr(fileName.lastIndexOf(".")+1);
-            if (!(fileExtension in files)) {
-                files[fileExtension] = [];
+            if (fileName.substr(fileName.lastIndexOf(".")+1) == "html") {
+                // don't move to s3
+                // there is going to be only one html file
+                files["html"] = fs.readFileSync(folderName + "/" + fileName, "utf-8");
+            }else {
+                randomFolderName = googleBucketUtil.uploadFile(folderName, fileName, storage, bucket, outputPath, randomFolderName);
+                var fileExtension = fileName.substr(fileName.lastIndexOf(".")+1);
+                if (!(fileExtension in files)) {
+                    files[fileExtension] = [];
+                }
+                
+                files[fileExtension].push(baseURL + "/" + randomFolderName + "/" + fileName);
             }
             
-            files[fileExtension].push(baseURL + "/" + randomFolderName + "/" + fileName);
         });
         fileHandlerUtil.removeDir(targetFolder);
         callback(files);
