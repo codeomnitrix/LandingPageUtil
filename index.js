@@ -1,26 +1,27 @@
 const extractionUtil = require('./lib/extraction-util');
 const fileHandlerUtil = require('./lib/file-handler-util');
+const googleBucketUtil = require('./lib/google-bucket-util');
 const textReplacementUtil = require('./lib/text-replacement-util');
 const fs =  require('fs');
 // Processes Archive to put js, css and other assets in public folder
 // returns html file with updated resources location
-exports.processArchive = function(archivePath, outputPath, tempPath, callback) {
+exports.processArchive = function(archivePath, outputPath, tempPath, storge, bucket, callback) {
     extractionUtil.extract(archivePath, tempPath, function(targetFolder) {
         var files = {};
         var filesList = [];
         filesList = walkSync([targetFolder], filesList);
         var randomFolderName = -1;
-        var retObj = {};
+        var baseURL = "https://storage.googleapis.com/" + bucket + "/" + outputPath;
         filesList.forEach(function(file) {
             var fileName = file.substr(file.lastIndexOf("/")+1);
             var folderName = file.substr(0, file.lastIndexOf("/"));
-            retObj = fileHandlerUtil.moveFileViaExtension(folderName, fileName, outputPath, randomFolderName);
-            randomFolderName = retObj['randomFolder'];
+            randomFolderName = googleBucketUtil.uploadFile(folderName, fileName, storage, bucket, outputPath, randomFolderName);
             var fileExtension = fileName.substr(fileName.lastIndexOf(".")+1);
             if (!(fileExtension in files)) {
                 files[fileExtension] = [];
             }
-            files[fileExtension].push(outputPath + "/" + randomFolderName + "/" + retObj['subFolder'] + "/" + fileName);
+            
+            files[fileExtension].push(baseURL + "/" + randomFolderName + "/" + fileName);
         });
         fileHandlerUtil.removeDir(targetFolder);
         callback(files);
