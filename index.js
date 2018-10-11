@@ -39,7 +39,7 @@ exports.updatePageLinks = function(pageString, files) {
     pageString = textReplacementUtil.updateJSReference(pageString, files['js']);
     pageString = textReplacementUtil.updateCSSReference(pageString, files['css']);
     imgArr = getImageArr(files);
-    pageString = textReplacementUtil.updateAssetsReference(pageString, getImageArr(files));
+    pageString = textReplacementUtil.updateAssetsReference(pageString, imgArr);
     return pageString;
 }
 
@@ -50,16 +50,16 @@ exports.updateOfferURL = function(pageString, offerURL, linkClass) {
 function getImageArr(files) {
     var retArr = [];
     if (files['png'] != undefined) {
-        retArr.concat(files['png']);
+        retArr = retArr.concat(files['png']);
     }
     if (files['jpg'] != undefined) {
-        retArr.concat(files['jpg']);
+        retArr = retArr.concat(files['jpg']);
     }
     if (files['jpeg'] != undefined) {
-        retArr.concat(files['jpeg']);
+        retArr = retArr.concat(files['jpeg']);
     }
     if (files['bmp'] != undefined) {
-        retArr.concat(files['bmp']);
+        retArr = retArr.concat(files['bmp']);
     }
     return retArr;
 }
