@@ -69,6 +69,8 @@ function getImageArr(files) {
 }
 
 function updateURLWithFileLink(folderName, fileName, filesList, baseURL, randomFolderName) {
+    if (fileName.substr(fileName.lastIndexOf("/")+1) == "html" || 
+    fileName.substr(fileName.lastIndexOf("/")+1) == "css")
     // check in the file if url(".*/file") is there if so then replace that and write it back
     var cssCode = fs.readFileSync(folderName + "/" + fileName, "utf-8");
     var allowedAssets = ["jpg", "jpeg", "png", "bmp", "svg", "ttf", "wotf", "otf"];
