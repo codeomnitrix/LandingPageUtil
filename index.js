@@ -10,11 +10,12 @@ exports.processArchive = function(archivePath, outputPath, tempPath, storage, bu
         var files = {};
         var filesList = [];
         filesList = walkSync([targetFolder], filesList);
-        var randomFolderName = -1;
+        var randomFolderName = Math.floor(Math.random()*1e14);
         var baseURL = "https://storage.googleapis.com/" + bucket + "/" + outputPath;
         filesList.forEach(function(file) {
             var fileName = file.substr(file.lastIndexOf("/")+1);
             var folderName = file.substr(0, file.lastIndexOf("/"));
+            updateURLWithFileLink(folderName, fileName, filesList, baseURL, randomFolderName);
             if (fileName.substr(fileName.lastIndexOf(".")+1) == "html") {
                 // don't move to s3
                 // there is going to be only one html file
@@ -61,7 +62,30 @@ function getImageArr(files) {
     if (files['bmp'] != undefined) {
         retArr = retArr.concat(files['bmp']);
     }
+    if (files['svg'] != undefined) {
+        retArr = retArr.concat(files['svg']);
+    }
     return retArr;
+}
+
+function updateURLWithFileLink(folderName, fileName, filesList, baseURL, randomFolderName) {
+    // check in the file if url(".*/file") is there if so then replace that and write it back
+    var cssCode = fs.readFileSync(folderName + "/" + fileName, "utf-8");
+    var allowedAssets = ["jpg", "jpeg", "png", "bmp", "svg", "ttf", "wotf", "otf"];
+    filesList.forEach(function(file) {
+        if (allowedAssets.indexOf(file.substr(file.lastIndexOf(".")+1)) > -1 && 
+                cssCode.indexOf(file.substr(file.lastIndexOf("/"))) > -1) {
+            var assetFile = file.substr(file.lastIndexOf("/")+1);
+            var regex = new RegExp(`url\\([.'"\/A-Aa-z0-9\-]+${assetFile}\\)`);
+            cssCode = cssCode.replace(regex, `url(${baseURL}/${randomFolderName}/${assetFile})`);
+            /*
+            cssCode = cssCode.replace(file.substr(file.lastIndexOf("/")), "aflatoonkid");
+            cssCode = cssCode.replace(/url\([.'"\/A-Za-z0-9]+aflatoonkid['"]+\)/g, 
+                "url(" + baseURL + "/" + randomFolderName + "/" + file.substr(file.lastIndexOf("/")+1) + ")");
+            */
+        }
+    });
+    fs.writeFileSync(folderName + "/" + fileName, cssCode);
 }
 
 function walkSync(dirList, filesList) {
